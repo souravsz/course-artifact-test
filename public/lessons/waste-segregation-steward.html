@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Waste Segregation at Source · We The Change Makers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   WE THE CHANGE MAKERS · Lesson theme
+   Black / Yellow / White, poster-style, bold uppercase heads
+   ========================================================= */
+:root{
+  --ink:#0B0B0B; --ink-2:#141414; --ink-3:#1D1D1D; --line:#2C2C2C;
+  --yellow:#FFC629; --yellow-soft:rgba(255,198,41,.14);
+  --white:#F6F4EE; --muted:#A19E97; --soft:#D8D5CE;
+  --green:#2DBE60; --blue:#3B82F6; --red:#EF4444;
+  --f-display:'Archivo Black','Arial Black',Impact,sans-serif;
+  --f-label:'Oswald','Arial Narrow','Roboto Condensed',sans-serif;
+  --f-body:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--ink);color:var(--white);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  display:flex;flex-direction:column;overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+[tabindex="-1"]:focus{outline:none}
+[hidden]{display:none!important}
+strong{color:var(--white)}
+
+/* ---------- Top bar ---------- */
+.topbar{display:flex;align-items:center;gap:28px;padding:12px 24px;background:#000;border-bottom:1px solid var(--line);flex-shrink:0}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand-star{width:34px;height:34px;fill:var(--yellow);flex-shrink:0}
+.brand-name{font-family:var(--f-display);text-transform:uppercase;font-size:15px;letter-spacing:.02em;line-height:1.1;white-space:nowrap}
+.brand-tag{font-family:var(--f-label);text-transform:uppercase;font-size:11px;letter-spacing:.14em;color:var(--yellow);white-space:nowrap}
+.progress-wrap{flex:1;min-width:0}
+.progress-meta{display:flex;justify-content:space-between;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.1em;font-size:12px;color:var(--muted);margin-bottom:6px}
+.progress-meta span:last-child{color:var(--white)}
+.progress{height:6px;background:var(--ink-3);border-radius:99px;overflow:hidden}
+#progressFill{height:100%;width:0;background:var(--yellow);border-radius:99px;transition:width .6s var(--ease)}
+
+/* ---------- Stage ---------- */
+.stage-wrap{position:relative;flex:1;min-height:0}
+#stage{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth}
+#wipe{position:absolute;inset:0;background:var(--yellow);pointer-events:none;z-index:40;clip-path:inset(0 100% 0 0);display:grid;place-items:center}
+#wipe svg{width:72px;height:72px;fill:var(--ink)}
+#wipe.go{animation:wipe .7s cubic-bezier(.7,0,.3,1)}
+@keyframes wipe{0%{clip-path:inset(0 100% 0 0)}45%,55%{clip-path:inset(0 0 0 0)}100%{clip-path:inset(0 0 0 100%)}}
+.slide{display:none}
+.slide.active{display:block}
+.slide.active .slide-inner > *{animation:rise .6s var(--ease) both}
+.slide.active .slide-inner > *:nth-child(2){animation-delay:.06s}
+.slide.active .slide-inner > *:nth-child(3){animation-delay:.12s}
+.slide.active .slide-inner > *:nth-child(4){animation-delay:.18s}
+.slide.active .slide-inner > *:nth-child(n+5){animation-delay:.24s}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.slide-inner{max-width:1180px;margin:0 auto;padding:36px 44px 40px}
+/* Fit-to-frame: each slide is scaled (like a slide player) so it fits the iframe without scrolling */
+.fit{transform-origin:top left;transition:transform .25s var(--ease)}
+.slide.active.fitted{overflow:hidden}
+@media (max-height:720px){
+  .topbar{padding-top:8px;padding-bottom:8px}
+  .brand-star{width:28px;height:28px}
+  .navbar{padding-top:9px;padding-bottom:9px}
+  .navbar .btn{padding-top:9px;padding-bottom:9px}
+}
+.loading{display:grid;place-items:center;height:100%;font-family:var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- Type ---------- */
+.eyebrow{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.16em;font-size:13px;color:var(--yellow);display:flex;gap:10px;align-items:center;margin-bottom:14px}
+.eyebrow::before{content:'';width:24px;height:2px;background:var(--yellow)}
+.display{font-family:var(--f-display);font-size:clamp(40px,6vw,72px);line-height:.92;text-transform:uppercase;letter-spacing:-.01em}
+.title{font-family:var(--f-display);font-size:clamp(28px,4.4vw,48px);line-height:1;text-transform:uppercase}
+.mark{background:var(--yellow);color:var(--ink);padding:0 .14em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.lead{font-size:clamp(16px,1.8vw,19px);color:var(--soft);max-width:62ch;margin-top:18px}
+.footnote{font-size:13px;color:var(--muted);margin-top:22px}
+.counter-pill{display:inline-flex;gap:6px;align-items:center;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.1em;font-size:13px;border:1px solid var(--line);border-radius:99px;padding:5px 14px;margin-top:18px;color:var(--soft)}
+.counter-pill b{color:var(--yellow);font-size:15px}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.1em;font-size:15px;font-weight:600;
+  padding:12px 26px;border-radius:999px;transition:transform .15s,background .2s,color .2s,box-shadow .2s}
+.btn-primary{background:var(--yellow);color:var(--ink)}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,198,41,.25)}
+.btn-primary:disabled{background:#2E2E2E;color:#6E6B66;cursor:not-allowed}
+.btn-ghost{border:1.5px solid var(--line);color:var(--white)}
+.btn-ghost:hover:not(:disabled){border-color:var(--yellow)}
+.btn-ghost:disabled{opacity:.35;cursor:not-allowed}
+.btn.nudge{animation:nudge 1.2s var(--ease) 2}
+@keyframes nudge{0%{box-shadow:0 0 0 0 rgba(255,198,41,.7)}100%{box-shadow:0 0 0 18px rgba(255,198,41,0)}}
+
+/* ---------- Bottom nav ---------- */
+.navbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 24px;background:#000;border-top:1px solid var(--line);flex-shrink:0}
+#navHint{font-size:14px;color:var(--muted);text-align:center;flex:1}
+#navHint::before{content:'🔒 ';opacity:.8}
+#navHint:empty::before{content:''}
+
+/* ---------- 0 · Intro ---------- */
+.intro-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:center}
+.objectives{display:grid;gap:10px;margin-top:28px}
+.obj{display:flex;gap:16px;align-items:center;padding:14px 18px;background:var(--ink-2);border:1px solid var(--line);border-radius:14px}
+.obj-n{font-family:var(--f-display);color:var(--yellow);font-size:22px;width:28px}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.meta-row span{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.1em;font-size:12px;padding:6px 12px;border-radius:99px;background:var(--ink-3);color:var(--soft)}
+.privacy-note{font-size:13px;color:var(--muted);margin-top:18px;max-width:60ch;padding-left:12px;border-left:2px solid var(--line)}
+.orbit{position:relative;width:340px;height:340px;margin:0 auto;--r:150px}
+.orbit .rays{position:absolute;inset:0;animation:spin 40s linear infinite}
+.orbit .rays line{stroke:var(--yellow);stroke-width:1.4;opacity:.35}
+.orbit .ring{position:absolute;inset:18%;border:1.5px dashed rgba(255,198,41,.35);border-radius:50%;animation:spin 30s linear infinite reverse}
+.orbit .big-star{position:absolute;inset:27%;fill:var(--yellow);filter:drop-shadow(0 0 30px rgba(255,198,41,.35));animation:starIn 1s var(--ease) both,breathe 4s ease-in-out 1s infinite}
+.orbit .dot{position:absolute;top:50%;left:50%;width:20px;height:20px;margin:-10px;border-radius:50%;animation:orbit 10s linear infinite}
+.dot.g{background:var(--green)}.dot.b{background:var(--blue);animation-delay:-3.33s}.dot.r{background:var(--red);animation-delay:-6.66s}
+@keyframes orbit{from{transform:rotate(0) translateX(var(--r)) rotate(0)}to{transform:rotate(360deg) translateX(var(--r)) rotate(-360deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes starIn{from{transform:scale(0) rotate(-120deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes breathe{50%{transform:scale(1.06)}}
+
+/* ---------- 1 · Two futures ---------- */
+.toggle{display:inline-flex;gap:6px;padding:6px;background:var(--ink-2);border:1px solid var(--line);border-radius:999px;margin-top:26px}
+.toggle button{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.1em;font-size:14px;padding:10px 22px;border-radius:999px;color:var(--soft);transition:.2s}
+.toggle button[aria-pressed="true"]{background:var(--yellow);color:var(--ink)}
+.toggle button .seen{margin-left:6px;color:var(--green)}
+.future-panel{margin-top:22px;min-height:250px;padding:28px;background:var(--ink-2);border:1px solid var(--line);border-radius:20px}
+.future-panel.empty{display:grid;place-items:center;color:var(--muted)}
+.future-panel.mixed{border-color:rgba(239,68,68,.4)}
+.future-panel.sorted{border-color:rgba(45,190,96,.4)}
+.flow{display:flex;align-items:center;gap:14px}
+.node{flex:1;text-align:center;padding:18px 12px;border-radius:16px;background:var(--ink-3);animation:pop .5s var(--ease) var(--d,0s) both}
+.node b{display:block;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.08em;font-size:16px;margin-top:8px}
+.node small{display:block;color:var(--muted);font-size:13.5px;margin-top:4px;line-height:1.45}
+.node.bad{background:rgba(239,68,68,.1);outline:1px solid rgba(239,68,68,.35)}
+.node-art{font-size:46px;line-height:1;height:64px;display:grid;place-items:center}
+.node-art.truck span{display:inline-block;transform:scaleX(-1);animation:drive 1.4s var(--ease) var(--d,0s) both}
+.node-art svg{height:64px;width:auto}
+@keyframes drive{from{translate:-40px 0}60%{translate:6px 0}to{translate:0 0}}
+.arrow{flex:0 0 34px;height:3px;background:var(--yellow);position:relative;transform-origin:left;animation:growX .35s var(--ease) var(--d,0s) both}
+.arrow::after{content:'';position:absolute;right:-2px;top:-5px;border:6.5px solid transparent;border-left:9px solid var(--yellow);border-right:0}
+@keyframes growX{from{transform:scaleX(0)}to{transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+.landfill .smoke path{animation:smoke 2.6s ease-in-out infinite;transform-box:fill-box}
+.landfill .smoke .s2{animation-delay:.8s}.landfill .smoke .s3{animation-delay:1.6s}
+@keyframes smoke{0%{opacity:0;transform:translateY(8px)}40%{opacity:.9}100%{opacity:0;transform:translateY(-12px)}}
+.lanes{display:grid;gap:12px}
+.lane{display:grid;grid-template-columns:150px 40px 1fr;align-items:center;gap:12px;padding:12px 16px;border-radius:14px;background:var(--ink-3);animation:pop .5s var(--ease) var(--d,0s) both}
+.lane-src{display:flex;align-items:center;gap:10px;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.08em}
+.lane-src svg{width:30px;height:36px}
+.lane .arrow{flex:none;width:40px}
+.lane-out{display:flex;align-items:center;gap:14px}
+.lane-out .em{font-size:32px}
+.lane-out b{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.08em}
+.lane-out small{display:block;color:var(--muted);font-size:13.5px}
+.sprout{display:inline-block;animation:grow 1.6s var(--ease) var(--d2,0s) both;transform-origin:bottom}
+@keyframes grow{from{transform:scale(0)}to{transform:none}}
+.spin-slow{display:inline-block;animation:spin 3s linear infinite}
+.takeaway{margin-top:20px;padding:18px 22px;border-radius:14px;background:var(--yellow);color:var(--ink);font-size:17px;animation:pop .5s var(--ease) both}
+.takeaway strong{color:var(--ink);font-family:var(--f-label);text-transform:uppercase;letter-spacing:.08em}
+
+/* ---------- 2 · Bin cards ---------- */
+.flip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+.flip{perspective:1200px;height:360px;cursor:pointer;border-radius:20px}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .75s var(--ease);transform-style:preserve-3d}
+.flip.flipped .flip-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:20px;padding:24px;display:flex;flex-direction:column;overflow:hidden}
+.front{background:var(--ink-2);border:1px solid var(--line);align-items:center;justify-content:center;text-align:center;gap:6px}
+.front::before{content:'';position:absolute;inset:auto -30% -45% -30%;height:70%;background:radial-gradient(closest-side,var(--c),transparent);opacity:.22}
+.front svg{width:110px;height:132px;margin-bottom:12px;transition:transform .3s}
+.flip:hover .front svg{transform:translateY(-6px) rotate(-3deg)}
+.bin-label{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.16em;font-size:13px;color:var(--c)}
+.front h3{font-family:var(--f-display);text-transform:uppercase;font-size:30px;line-height:1}
+.front p{color:var(--muted);font-size:14px}
+.tap-hint{margin-top:12px;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:var(--soft);border:1px solid var(--line);border-radius:99px;padding:5px 12px}
+.flip.flipped .tap-hint{opacity:0}
+.back{transform:rotateY(180deg);background:var(--ink-3);border:2px solid var(--c)}
+.back h4{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.12em;font-size:13px;color:var(--c);margin-bottom:6px}
+.back ul{list-style:none;display:grid;gap:4px;margin-bottom:14px}
+.back li{font-size:14.5px;padding-left:18px;position:relative}
+.back li::before{content:'';position:absolute;left:2px;top:.6em;width:7px;height:7px;border-radius:50%;background:var(--c)}
+.back .tip{font-size:13.5px;color:var(--soft);background:rgba(255,255,255,.04);border-radius:10px;padding:10px 12px}
+.back .becomes{margin-top:auto;padding-top:12px;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.1em;font-size:14px;display:flex;justify-content:space-between;border-top:1px solid var(--line)}
+.back .becomes b{color:var(--c)}
+
+/* ---------- 3 · Sort game ---------- */
+.sort-stats{display:flex;gap:10px;flex-wrap:wrap}
+.tray{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;min-height:70px;padding:16px;border-radius:18px;background:var(--ink-2);border:1px solid var(--line)}
+.tray .all-done{width:100%;text-align:center;color:var(--green);font-family:var(--f-label);text-transform:uppercase;letter-spacing:.12em;align-self:center}
+.item{display:flex;align-items:center;gap:10px;padding:6px 16px 6px 6px;background:var(--ink-3);border:1.5px solid var(--line);border-radius:999px;touch-action:none;user-select:none;-webkit-user-select:none;font-size:14.5px;font-weight:500;transition:border-color .2s,box-shadow .2s,opacity .2s}
+.item:hover{border-color:#555}
+.item .em{font-size:26px;width:44px;height:44px;display:grid;place-items:center;background:#262626;border-radius:50%;pointer-events:none}
+.item .nm{pointer-events:none}
+.item.selected{border-color:var(--yellow);box-shadow:0 0 0 4px var(--yellow-soft)}
+.item.lifting{opacity:.3}
+.item.wrong{animation:shake .45s}
+.item.done{animation:suck .45s var(--ease) forwards;pointer-events:none}
+@keyframes suck{to{transform:scale(.2) translateY(60px);opacity:0}}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.ghost{position:fixed;z-index:100;pointer-events:none;transform:translate(-50%,-50%) scale(1.08) rotate(-4deg);box-shadow:0 18px 40px rgba(0,0,0,.6);border-color:var(--yellow)}
+.sort-feedback{min-height:52px;margin:16px 0;padding:12px 16px;border-radius:12px;font-size:15px;display:flex;align-items:center;gap:10px;color:var(--muted);border:1px dashed var(--line)}
+.sort-feedback.good{color:var(--white);border:1px solid rgba(45,190,96,.5);background:rgba(45,190,96,.1)}
+.sort-feedback.bad{color:var(--white);border:1px solid rgba(239,68,68,.5);background:rgba(239,68,68,.1)}
+.bins-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.bin{display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 10px 14px;border:2px dashed var(--line);border-radius:20px;background:var(--ink-2);transition:border-color .2s,background .2s,transform .2s}
+.bin svg{width:86px;height:104px;overflow:visible}
+.bin svg .lid{transform-box:fill-box;transform-origin:0% 100%;transition:transform .25s var(--ease)}
+.bin.over svg .lid,.bin.armed:hover svg .lid{transform:rotate(-16deg)}
+.bin.over,.bin.armed{border-color:var(--c);background:color-mix(in srgb,var(--c) 10%,var(--ink-2))}
+.bin.armed{animation:armed 1.4s ease-in-out infinite}
+@keyframes armed{50%{border-style:solid}}
+.bin .b-name{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.12em;font-size:15px;color:var(--c)}
+.bin .b-count{font-size:12.5px;color:var(--muted)}
+.bin.gulp{animation:gulp .45s var(--ease)}
+.bin.reject{animation:shake .45s}
+@keyframes gulp{40%{transform:scale(1.07)}}
+
+/* ---------- 4 · Playbook ---------- */
+.moves{list-style:none;display:grid;gap:12px;margin-top:26px;counter-reset:mv}
+.move{background:var(--ink-2);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:border-color .2s}
+.move.open{border-color:var(--yellow)}
+.move-head{display:flex;align-items:center;gap:18px;width:100%;padding:16px 20px;text-align:left}
+.move-n{font-family:var(--f-display);font-size:34px;color:var(--yellow);width:44px;line-height:1}
+.move-t{flex:1;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.08em;font-size:19px}
+.move-i{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;transition:transform .3s,background .2s;font-size:18px}
+.move.open .move-i{transform:rotate(45deg);background:var(--yellow);color:var(--ink);border-color:var(--yellow)}
+.move-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--ease)}
+.move.open .move-body{grid-template-rows:1fr}
+.move-body > div{overflow:hidden}
+.move-body p{padding:0 20px 18px 82px;color:var(--soft);font-size:15.5px}
+.move-body em{color:var(--yellow);font-style:normal}
+
+/* ---------- 5 · Scenario ---------- */
+.meters{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.meter{background:var(--ink-2);border:1px solid var(--line);border-radius:14px;padding:12px 16px;position:relative}
+.meter-top{display:flex;justify-content:space-between;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.1em;font-size:13px;color:var(--soft);margin-bottom:8px}
+.meter-top b{color:var(--white)}
+.meter-track{height:10px;background:var(--ink-3);border-radius:99px;overflow:hidden}
+.meter-fill{height:100%;border-radius:99px;transition:width .9s var(--ease),background .4s}
+.delta{position:absolute;right:16px;top:-12px;font-family:var(--f-label);font-size:14px;padding:2px 10px;border-radius:99px;animation:deltaPop 1.8s var(--ease) forwards}
+.delta.up{background:var(--green);color:#03250f}.delta.down{background:var(--red);color:#2b0505}.delta.flat{background:#444}
+@keyframes deltaPop{0%{opacity:0;transform:translateY(10px)}15%,75%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-8px)}}
+.scene{margin-top:18px;padding:26px;background:var(--ink-2);border:1px solid var(--line);border-left:4px solid var(--yellow);border-radius:18px;animation:pop .5s var(--ease) both}
+.scene-time{display:inline-block;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.14em;font-size:12px;background:var(--yellow-soft);color:var(--yellow);padding:4px 12px;border-radius:99px}
+.scene-setup{margin-top:14px;color:var(--soft);font-size:16px;max-width:70ch}
+.speech{display:flex;gap:16px;align-items:flex-start;margin-top:18px}
+.avatar{flex-shrink:0;width:60px;height:60px;border-radius:50%;background:var(--yellow);display:grid;place-items:center;font-size:34px}
+.who{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.1em;font-size:13px;color:var(--muted)}
+.bubble{margin-top:6px;background:var(--white);color:var(--ink);padding:14px 18px;border-radius:4px 18px 18px 18px;font-size:17px;font-weight:600;line-height:1.45;max-width:62ch}
+.choices-label{margin-top:24px;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.14em;font-size:13px;color:var(--yellow)}
+.choices{display:grid;gap:10px;margin-top:10px}
+.choice{display:flex;gap:14px;align-items:center;text-align:left;padding:14px 16px;border-radius:14px;background:var(--ink-3);border:1.5px solid var(--line);font-size:15.5px;transition:border-color .2s,transform .15s,opacity .3s}
+.choice:hover:not(:disabled){border-color:var(--yellow);transform:translateX(4px)}
+.choice .key{flex-shrink:0;width:32px;height:32px;border-radius:8px;display:grid;place-items:center;background:#2A2A2A;font-family:var(--f-display);font-size:14px}
+.choice:disabled{cursor:default}
+.choice:disabled:not(.chosen){opacity:.35}
+.choice.chosen{border-color:var(--yellow)}
+.choice.chosen .key{background:var(--yellow);color:var(--ink)}
+.choices.decided .choice:not(.chosen){display:none}
+@media (min-width:860px){.scene-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:32px;align-items:start}.scene-grid .choices-label{margin-top:0}}
+.scene-feedback{margin-top:16px;padding:18px 20px;border-radius:14px;background:var(--ink-3);animation:pop .45s var(--ease) both}
+.q-chip{display:inline-block;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.12em;font-size:12px;padding:4px 12px;border-radius:99px;margin-bottom:8px}
+.q-chip.best{background:var(--green);color:#03250f}.q-chip.missed{background:var(--yellow);color:var(--ink)}.q-chip.risky{background:var(--red);color:#2b0505}
+.scene-feedback p{color:var(--soft)}
+.scene-feedback .btn{margin-top:14px}
+.scen-end{text-align:center;padding:34px 26px}
+.scen-end .rating{font-family:var(--f-display);text-transform:uppercase;font-size:clamp(28px,4vw,44px);line-height:1;margin:10px 0}
+.scen-end .medal{font-size:56px}
+.path{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:18px 0}
+.path span{font-size:13.5px;padding:6px 12px;border-radius:99px;background:var(--ink-3);border:1px solid var(--line)}
+.scen-end p{color:var(--soft);max-width:60ch;margin:0 auto}
+
+/* ---------- 6 · Quiz ---------- */
+.quiz-card{margin-top:24px;padding:28px;background:var(--ink-2);border:1px solid var(--line);border-radius:20px}
+.q-dots{display:flex;gap:6px;margin-bottom:18px}
+.q-dots i{flex:1;height:5px;border-radius:99px;background:var(--ink-3)}
+.q-dots i.ok{background:var(--green)}.q-dots i.no{background:var(--red)}.q-dots i.now{background:var(--yellow)}
+.q-num{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.14em;font-size:13px;color:var(--muted)}
+.q-text{font-size:clamp(19px,2.4vw,24px);font-weight:700;margin:6px 0 18px;line-height:1.3}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);background:var(--ink-3);font-size:15.5px;transition:border-color .2s}
+.opt:hover:not(:disabled){border-color:var(--yellow)}
+.opt .key{flex-shrink:0;width:28px;height:28px;border-radius:7px;display:grid;place-items:center;background:#2A2A2A;font-weight:700;font-size:13px}
+.opt.correct{border-color:var(--green);background:rgba(45,190,96,.12)}
+.opt.correct .key{background:var(--green);color:#03250f}
+.opt.wrong{border-color:var(--red);background:rgba(239,68,68,.12)}
+.opt.wrong .key{background:var(--red)}
+.opt:disabled{cursor:default}
+.explain{margin-top:14px;padding:14px 16px;border-radius:12px;background:var(--ink-3);color:var(--soft);font-size:15px;animation:pop .4s var(--ease) both}
+.explain b{color:var(--white)}
+.q-actions{margin-top:18px;display:flex;justify-content:flex-end}
+.q-result{text-align:center;padding:12px 0}
+.q-result .big{font-family:var(--f-display);font-size:clamp(56px,9vw,96px);line-height:1}
+.q-result .big.pass{color:var(--yellow)}.q-result .big.fail{color:var(--red)}
+.q-result p{color:var(--soft);margin:10px auto 18px;max-width:52ch}
+
+/* ---------- 7 · Complete ---------- */
+.done-head{text-align:center}
+.done-head .orbit{width:150px;height:150px;--r:66px;margin-bottom:4px}
+.done-head .eyebrow{justify-content:center}
+.done-head .eyebrow::before{display:none}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:32px}
+.stat{background:var(--ink-2);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center}
+.stat .v{font-family:var(--f-display);font-size:26px;color:var(--yellow);line-height:1.1}
+.stat .l{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:var(--muted);margin-top:6px}
+.pledge{margin-top:22px;padding:28px;border-radius:20px;background:var(--yellow);color:var(--ink);display:flex;gap:24px;align-items:center}
+.pledge h3{font-family:var(--f-display);text-transform:uppercase;font-size:22px}
+.pledge p{font-size:17px;font-weight:500;margin-top:6px}
+.pledge .btn{background:var(--ink);color:var(--yellow);flex-shrink:0}
+.pledge .btn:disabled{opacity:1;cursor:default}
+.saved-note{text-align:center;color:var(--muted);font-size:14px;margin-top:18px}
+.confetti{position:fixed;top:-20px;z-index:60;pointer-events:none;width:10px;height:14px;animation:fall linear forwards}
+@keyframes fall{to{transform:translate(var(--x),110vh) rotate(var(--r));opacity:.9}}
+
+/* ---------- Idle overlay ---------- */
+.idle{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.82);display:grid;place-items:center;backdrop-filter:blur(4px);animation:pop .3s both}
+.idle-card{text-align:center;padding:36px;max-width:380px}
+.idle-card .em{font-size:52px}
+.idle-card h3{font-family:var(--f-display);text-transform:uppercase;font-size:28px;margin:8px 0}
+.idle-card p{color:var(--soft);margin-bottom:20px}
+
+/* ---------- Responsive ---------- */
+@media (max-width:860px){
+  .intro-grid{grid-template-columns:1fr}
+  .intro-art{order:-1}
+  .orbit{width:220px;height:220px;--r:96px}
+  .flip-grid{grid-template-columns:1fr}
+  .flip{height:340px}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .pledge{flex-direction:column;text-align:center}
+}
+@media (max-width:640px){
+  .topbar{gap:14px;padding:10px 14px}
+  .brand-tag,.brand-name{display:none}
+  .slide-inner{padding:28px 18px 40px}
+  .flow{flex-direction:column}
+  .flow .arrow{flex:0 0 26px;width:3px;height:26px;transform-origin:top;animation-name:growY}
+  .flow .arrow::after{right:-5px;top:auto;bottom:-6px;border:6.5px solid transparent;border-top:9px solid var(--yellow);border-bottom:0}
+  .node{width:100%}
+  .lane{grid-template-columns:1fr;gap:6px}
+  .lane .arrow{display:none}
+  .bins-row{gap:8px}
+  .bin svg{width:58px;height:70px}
+  .bin .b-name{font-size:13px}
+  .meters{grid-template-columns:1fr}
+  .move-body p{padding-left:20px}
+  .navbar{padding:10px 14px}
+  #navHint{font-size:12.5px}
+  .btn{padding:11px 18px;font-size:14px}
+}
+@keyframes growY{from{transform:scaleY(0)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <svg class="brand-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.6l3.05 6.6 7.2.8-5.35 4.9 1.5 7.1L12 17.4 5.6 21l1.5-7.1L1.75 9l7.2-.8z"/></svg>
+    <div>
+      <div class="brand-name">We the Change Makers</div>
+      <div class="brand-tag">Real stewards. Real communities.</div>
+    </div>
+  </div>
+  <div class="progress-wrap" aria-label="Lesson progress">
+    <div class="progress-meta"><span>Module 01 · Waste segregation</span><span id="slideCount">1 / 8</span></div>
+    <div class="progress"><div id="progressFill"></div></div>
+  </div>
+</header>
+
+<div class="stage-wrap">
+<main id="stage">
+  <div class="loading" id="loading">Loading lesson…</div>
+
+  <!-- ===================== 0 · INTRO ===================== -->
+  <section class="slide" id="intro" data-req="none" data-title="Welcome">
+    <div class="slide-inner intro-grid">
+      <div>
+        <div class="eyebrow">Module 01 · Steward onboarding</div>
+        <h1 class="display">Sort it at<br><span class="mark">the source.</span></h1>
+        <p class="lead">Welcome, <strong id="learnerName">Steward</strong>. Your first job is the one everything else depends on: helping every home send its waste out the right way, starting with the very first bag.</p>
+        <div class="objectives">
+          <div class="obj"><span class="obj-n">01</span><span>Tell wet, dry and hazardous waste apart in seconds</span></div>
+          <div class="obj"><span class="obj-n">02</span><span>Sort real household items without second-guessing</span></div>
+          <div class="obj"><span class="obj-n">03</span><span>Handle a tough moment at the gate and win the resident over</span></div>
+        </div>
+        <div class="meta-row"><span>⏱ ~10 min</span><span>8 screens</span><span>1 scenario</span><span>Quiz · pass 80%</span></div>
+        <p class="privacy-note">This lesson records your progress, time on each screen, and when you switch away from it, so your trainer can support you.</p>
+      </div>
+      <div class="intro-art" aria-hidden="true">
+        <div class="orbit">
+          <svg class="rays" viewBox="0 0 200 200"></svg>
+          <div class="ring"></div>
+          <svg class="big-star" viewBox="0 0 24 24"><path d="M12 1.6l3.05 6.6 7.2.8-5.35 4.9 1.5 7.1L12 17.4 5.6 21l1.5-7.1L1.75 9l7.2-.8z"/></svg>
+          <span class="dot g"></span><span class="dot b"></span><span class="dot r"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 1 · TWO FUTURES ===================== -->
+  <section class="slide" id="why" data-req="activity" data-title="One bag, two futures" data-hint="Tap both options to continue">
+    <div class="slide-inner">
+      <div class="eyebrow">Why it matters</div>
+      <h2 class="title">One bag. <span class="mark">Two futures.</span></h2>
+      <p class="lead">The moment a resident ties up their bag, the future of that waste is already decided. Tap both options to see where it goes.</p>
+      <div class="toggle" role="group" aria-label="Choose a future">
+        <button data-future="mixed" aria-pressed="false">If it's mixed</button>
+        <button data-future="sorted" aria-pressed="false">If it's sorted</button>
+      </div>
+      <div id="futurePanel" class="future-panel empty" aria-live="polite"><div>👆 Pick one to start</div></div>
+      <div id="whyTakeaway" class="takeaway" hidden><strong>The takeaway ·</strong> Segregation isn't extra work at the end of the line. It's what makes composting and recycling possible at all. Once waste is mixed, the damage is done.</div>
+    </div>
+  </section>
+
+  <!-- ===================== 2 · BIN CARDS ===================== -->
+  <section class="slide" id="bins" data-req="activity" data-title="Know your three bins" data-hint="Flip all three cards to continue">
+    <div class="slide-inner">
+      <div class="eyebrow">The three streams</div>
+      <h2 class="title">Know your <span class="mark">three bins</span></h2>
+      <p class="lead">Every item a household throws away belongs to one of three streams. Tap each card to flip it.</p>
+      <div class="counter-pill"><b id="flipCount">0</b> / 3 flipped</div>
+      <div class="flip-grid">
+        <div class="flip" role="button" tabindex="0" aria-pressed="false" data-bin="wet" style="--c:var(--green)">
+          <div class="flip-inner">
+            <div class="face front"><span data-binsvg="wet"></span><span class="bin-label">Green bin</span><h3>Wet waste</h3><p>Anything that rots</p><span class="tap-hint">Tap to flip ↻</span></div>
+            <div class="face back">
+              <h4>Goes in</h4>
+              <ul><li>Food scraps and leftovers</li><li>Fruit and vegetable peels</li><li>Tea leaves, coffee grounds</li><li>Eggshells, bones</li><li>Flowers and garden leaves</li></ul>
+              <div class="tip"><b>Watch for:</b> food tied inside plastic covers. Empty the food out; the cover goes to dry.</div>
+              <div class="becomes"><span>Becomes</span><b>Compost / biogas</b></div>
+            </div>
+          </div>
+        </div>
+        <div class="flip" role="button" tabindex="0" aria-pressed="false" data-bin="dry" style="--c:var(--blue)">
+          <div class="flip-inner">
+            <div class="face front"><span data-binsvg="dry"></span><span class="bin-label">Blue bin</span><h3>Dry waste</h3><p>Things that don't rot</p><span class="tap-hint">Tap to flip ↻</span></div>
+            <div class="face back">
+              <h4>Goes in</h4>
+              <ul><li>Paper, newspaper, cardboard</li><li>Plastic bottles, covers, wrappers</li><li>Metal tins and cans</li><li>Glass bottles and jars</li><li>Milk and juice cartons</li></ul>
+              <div class="tip"><b>Watch for:</b> dirty, wet items. Rinsed and dry is what recyclers can actually use. Wrap broken glass in paper.</div>
+              <div class="becomes"><span>Becomes</span><b>Recycled material</b></div>
+            </div>
+          </div>
+        </div>
+        <div class="flip" role="button" tabindex="0" aria-pressed="false" data-bin="haz" style="--c:var(--red)">
+          <div class="flip-inner">
+            <div class="face front"><span data-binsvg="haz"></span><span class="bin-label">Red bin</span><h3>Hazardous</h3><p>Harmful if mixed</p><span class="tap-hint">Tap to flip ↻</span></div>
+            <div class="face back">
+              <h4>Goes in</h4>
+              <ul><li>Used batteries</li><li>CFL bulbs and tube lights</li><li>Paint, cleaner and chemical cans</li><li>Expired medicines</li><li>Thermometers, aerosol cans</li></ul>
+              <div class="tip"><b>Watch for:</b> crushing or breaking. Keep bulbs and batteries whole and hand them over as they are.</div>
+              <div class="becomes"><span>Becomes</span><b>Safe special disposal</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="footnote">Bin colours can differ between cities. Always follow your local municipal body's colour code; the three streams stay the same.</p>
+    </div>
+  </section>
+
+  <!-- ===================== 3 · SORT GAME ===================== -->
+  <section class="slide" id="sort" data-req="activity" data-title="Sort the morning collection" data-hint="Sort every item correctly to continue">
+    <div class="slide-inner">
+      <div class="eyebrow">Practice</div>
+      <h2 class="title">Sort the <span class="mark">morning collection</span></h2>
+      <p class="lead">Drag each item into the right bin. On a phone, tap an item, then tap a bin.</p>
+      <div class="sort-stats">
+        <div class="counter-pill"><b id="sortDone">0</b> / 9 sorted</div>
+        <div class="counter-pill"><b id="sortMiss">0</b> mistakes</div>
+      </div>
+      <div id="tray" class="tray" aria-label="Items to sort"></div>
+      <div id="sortFeedback" class="sort-feedback" aria-live="polite">Pick up the first item.</div>
+      <div class="bins-row">
+        <button class="bin" data-bin="wet" style="--c:var(--green)"><span data-binsvg="wet"></span><span class="b-name">Wet</span><span class="b-count"><span>0</span> items</span></button>
+        <button class="bin" data-bin="dry" style="--c:var(--blue)"><span data-binsvg="dry"></span><span class="b-name">Dry</span><span class="b-count"><span>0</span> items</span></button>
+        <button class="bin" data-bin="haz" style="--c:var(--red)"><span data-binsvg="haz"></span><span class="b-name">Hazardous</span><span class="b-count"><span>0</span> items</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 4 · PLAYBOOK ===================== -->
+  <section class="slide" id="playbook" data-req="activity" data-title="The steward's playbook" data-hint="Open all four moves to continue">
+    <div class="slide-inner">
+      <div class="eyebrow">Your role</div>
+      <h2 class="title">The steward's <span class="mark">playbook</span></h2>
+      <p class="lead">Rules don't change habits. People do. These four moves are how good stewards bring a whole building along. Open each one.</p>
+      <div class="counter-pill"><b id="moveCount">0</b> / 4 opened</div>
+      <ol class="moves">
+        <li class="move" data-move="greet"><button class="move-head" aria-expanded="false"><span class="move-n">01</span><span class="move-t">Greet first, by name</span><span class="move-i">+</span></button>
+          <div class="move-body"><div><p>People listen to someone they know. Learn residents' names, be at the gate on time, and smile before you say anything about the bag. <em>Trust comes before correction.</em></p></div></div></li>
+        <li class="move" data-move="show"><button class="move-head" aria-expanded="false"><span class="move-n">02</span><span class="move-t">Show, don't lecture</span><span class="move-i">+</span></button>
+          <div class="move-body"><div><p>A two-minute demo at their own kitchen bin beats any rulebook. Point at real items: "This peel goes here, this cover goes there." <em>Make it look easy, because it is.</em></p></div></div></li>
+        <li class="move" data-move="praise"><button class="move-head" aria-expanded="false"><span class="move-n">03</span><span class="move-t">Praise progress, fix privately</span><span class="move-i">+</span></button>
+          <div class="move-body"><div><p>Thank them for what's right before you mention what's wrong, and never correct someone in front of their neighbours. <em>Embarrassed people stop trying.</em></p></div></div></li>
+        <li class="move" data-move="record"><button class="move-head" aria-expanded="false"><span class="move-n">04</span><span class="move-t">Record and report</span><span class="move-i">+</span></button>
+          <div class="move-body"><div><p>Note which homes are segregating and which need a follow-up visit. This data shows where the community needs support. <em>It's never for naming and shaming.</em></p></div></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== 5 · SCENARIO ===================== -->
+  <section class="slide" id="scenario" data-req="activity" data-title="Scenario: the mixed bag at the gate" data-hint="Finish the scenario to continue">
+    <div class="slide-inner">
+      <div class="eyebrow">Scenario · Real situation</div>
+      <h2 class="title">The mixed bag <span class="mark">at the gate</span></h2>
+      <div class="meters">
+        <div class="meter" id="mTrust"><div class="meter-top"><span>Resident trust</span><b>50</b></div><div class="meter-track"><div class="meter-fill"></div></div></div>
+        <div class="meter" id="mSeg"><div class="meter-top"><span>Society segregation</span><b>30</b></div><div class="meter-track"><div class="meter-fill"></div></div></div>
+      </div>
+      <div id="scenBox"></div>
+    </div>
+  </section>
+
+  <!-- ===================== 6 · QUIZ ===================== -->
+  <section class="slide" id="quiz" data-req="activity" data-title="Quick quiz" data-hint="Score 80% or more to continue">
+    <div class="slide-inner">
+      <div class="eyebrow">Check your knowledge</div>
+      <h2 class="title">Quick <span class="mark">quiz</span></h2>
+      <p class="lead">Five questions. Get four right to finish the module. You can retry if you need to.</p>
+      <div id="quizBox" class="quiz-card"></div>
+    </div>
+  </section>
+
+  <!-- ===================== 7 · COMPLETE ===================== -->
+  <section class="slide" id="complete" data-req="none" data-title="Module complete">
+    <div class="slide-inner">
+      <div class="done-head">
+        <div class="orbit" aria-hidden="true">
+          <svg class="rays" viewBox="0 0 200 200"></svg>
+          <svg class="big-star" viewBox="0 0 24 24"><path d="M12 1.6l3.05 6.6 7.2.8-5.35 4.9 1.5 7.1L12 17.4 5.6 21l1.5-7.1L1.75 9l7.2-.8z"/></svg>
+          <span class="dot g"></span><span class="dot b"></span><span class="dot r"></span>
+        </div>
+        <div class="eyebrow">Module 01 complete</div>
+        <h1 class="display">You're ready<br><span class="mark">for the gate.</span></h1>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><div class="v" id="sQuiz">–</div><div class="l">Quiz score</div></div>
+        <div class="stat"><div class="v" id="sScen">–</div><div class="l">Scenario</div></div>
+        <div class="stat"><div class="v" id="sSort">–</div><div class="l">Sorting accuracy</div></div>
+        <div class="stat"><div class="v" id="sTime">–</div><div class="l">Active time</div></div>
+      </div>
+      <div class="pledge">
+        <div>
+          <h3>The steward's pledge</h3>
+          <p>I will greet before I correct, show before I tell, and treat every bag as a chance to bring one more home along.</p>
+        </div>
+        <button class="btn" id="pledgeBtn">★ Take the pledge</button>
+      </div>
+      <p class="saved-note">Your progress has been saved. You can close this lesson.</p>
+    </div>
+  </section>
+</main>
+<div id="wipe" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 1.6l3.05 6.6 7.2.8-5.35 4.9 1.5 7.1L12 17.4 5.6 21l1.5-7.1L1.75 9l7.2-.8z"/></svg></div>
+</div>
+
+<footer class="navbar">
+  <button class="btn btn-ghost" id="backBtn">← Back</button>
+  <div id="navHint" aria-live="polite"></div>
+  <button class="btn btn-primary" id="nextBtn">Next →</button>
+</footer>
+
+<script>
+/* =========================================================================
+   LESSON RUNTIME
+   - Slide navigation with "locked Next" until each activity is done
+   - Tracking: emits events to the host app with window.parent.postMessage
+   - Host can send {source:'wtcm-host', type:'init', ...} to set learner,
+     attempt id, resume point and config.
+   ========================================================================= */
+(() => {
+'use strict';
+
+const LESSON = { id: 'wtcm-wm-101', title: 'Waste Segregation at Source', version: '1.0.1', passMark: 0.8 };
+const CONFIG = {
+  idleSeconds: 60,        // no input for this long = idle
+  heartbeatSeconds: 15,   // periodic "still here" ping with active time
+  targetOrigin: '*',      // SET THIS to your web app origin in production, e.g. 'https://app.wethechangemakers.org'
+  hostOrigin: null        // if set, only accept init messages from this origin
+};
+const inIframe = window.parent !== window;
+const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let learner = { id: 'guest', name: '' };
+let attemptId = 'att_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+let started = false;
+let completedEmitted = false;
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const slides = $$('.slide');
+const TOTAL = slides.length;
+const idx = id => slides.findIndex(s => s.id === id);
+let current = 0;
+const reqMet = slides.map(s => s.dataset.req === 'none');
+const visited = slides.map(() => false);
+
+/* ---------------- Timing ---------------- */
+const T = { start: 0, slideStart: 0, away: 0, idle: 0, slideAway: 0, slideIdle: 0, hiddenAt: null, idleAt: null, lastActivity: Date.now() };
+const stats = {
+  tabSwitches: 0, focusLost: 0, idleCount: 0,
+  sort: null, scenario: null,
+  quiz: { attempts: 0, score: null, total: 5, passed: false },
+  pledge: false
+};
+const nowAway = () => T.away + (T.hiddenAt ? Date.now() - T.hiddenAt : 0);
+const nowIdle = () => T.idle + (T.idleAt ? Date.now() - T.idleAt : 0);
+const activeMs = () => Math.max(0, Date.now() - T.start - nowAway() - nowIdle());
+function slideTimes() {
+  const now = Date.now();
+  const away = T.slideAway + (T.hiddenAt ? now - Math.max(T.hiddenAt, T.slideStart) : 0);
+  const idle = T.slideIdle + (T.idleAt ? now - Math.max(T.idleAt, T.slideStart) : 0);
+  const total = now - T.slideStart;
+  return { totalMs: total, activeMs: Math.max(0, total - away - idle), awayMs: away, idleMs: idle };
+}
+function fmtTime(ms) { const s = Math.round(ms / 1000); const m = Math.floor(s / 60); return m ? `${m}m ${s % 60}s` : `${s}s`; }
+
+/* ---------------- Tracking ---------------- */
+function emit(type, data = {}) {
+  const msg = {
+    source: 'wtcm-lesson', lessonId: LESSON.id, version: LESSON.version,
+    attemptId, learnerId: learner.id, type,
+    slide: current, slideId: slides[current] ? slides[current].id : null,
+    t: T.start ? Date.now() - T.start : 0, ts: new Date().toISOString(), data
+  };
+  if (inIframe) { try { window.parent.postMessage(msg, CONFIG.targetOrigin); } catch (e) {} }
+  if (window.console && console.debug) console.debug('[lesson]', type, data);
+}
+function progressPct() { let c = 0; for (let i = 0; i < TOTAL; i++) if (visited[i] && reqMet[i]) c++; return Math.round(c / TOTAL * 100); }
+function suspendData() { return { slide: current, reqMet: [...reqMet], visited: [...visited], sort: stats.sort, scenario: stats.scenario }; }
+function emitProgress() { emit('progress', { percent: progressPct(), suspendData: suspendData() }); }
+function summary() {
+  return {
+    totalMs: T.start ? Date.now() - T.start : 0, activeMs: activeMs(), awayMs: nowAway(), idleMs: nowIdle(),
+    tabSwitches: stats.tabSwitches, focusLost: stats.focusLost, idleCount: stats.idleCount,
+    progress: progressPct(), sort: stats.sort, scenario: stats.scenario,
+    quiz: { ...stats.quiz }, pledge: stats.pledge
+  };
+}
+
+/* Tab switching (page hidden) */
+document.addEventListener('visibilitychange', () => {
+  if (!started) return;
+  const now = Date.now();
+  if (document.hidden) {
+    endIdle();
+    T.hiddenAt = now; stats.tabSwitches++;
+    emit('tab_hidden', { count: stats.tabSwitches });
+  } else if (T.hiddenAt) {
+    const dur = now - T.hiddenAt;
+    T.away += dur; T.slideAway += now - Math.max(T.hiddenAt, T.slideStart);
+    T.hiddenAt = null; T.lastActivity = now;
+    emit('tab_visible', { awayMs: dur, totalAwayMs: T.away, count: stats.tabSwitches });
+  }
+});
+/* Focus left the lesson but the tab is still visible (other window, other app, or the host page around the iframe) */
+let focusOut = false;
+window.addEventListener('blur', () => {
+  if (!started) return;
+  setTimeout(() => {
+    if (!document.hidden && !document.hasFocus() && !focusOut) { focusOut = true; stats.focusLost++; emit('focus_lost', { count: stats.focusLost }); }
+  }, 250);
+});
+window.addEventListener('focus', () => { if (focusOut) { focusOut = false; emit('focus_back', {}); } });
+
+/* Idle detection */
+function onActivity() { T.lastActivity = Date.now(); if (T.idleAt) endIdle(); }
+['pointerdown', 'pointermove', 'keydown', 'wheel', 'touchstart'].forEach(ev => window.addEventListener(ev, onActivity, { passive: true, capture: true }));
+$('#stage').addEventListener('scroll', onActivity, { passive: true });
+function endIdle() {
+  if (!T.idleAt) return;
+  const now = Date.now(), dur = now - T.idleAt;
+  T.idle += dur; T.slideIdle += now - Math.max(T.idleAt, T.slideStart); T.idleAt = null;
+  emit('idle_end', { idleMs: dur, totalIdleMs: T.idle });
+  const ov = $('.idle'); if (ov) ov.remove();
+}
+setInterval(() => {
+  if (!started || document.hidden || T.idleAt) return;
+  if (Date.now() - T.lastActivity >= CONFIG.idleSeconds * 1000) {
+    T.idleAt = T.lastActivity; stats.idleCount++;
+    emit('idle_start', { afterSeconds: CONFIG.idleSeconds, count: stats.idleCount });
+    const ov = document.createElement('div');
+    ov.className = 'idle';
+    ov.innerHTML = `<div class="idle-card"><div class="em">⏸️</div><h3>Still there?</h3><p>The lesson paused because there was no activity. Tap anywhere to keep going.</p><button class="btn btn-primary">I'm here →</button></div>`;
+    document.body.appendChild(ov);
+  }
+}, 1000);
+let hbTimer = null;
+function startHeartbeat() {
+  clearInterval(hbTimer);
+  hbTimer = setInterval(() => { if (started && !document.hidden) emit('heartbeat', { activeMs: activeMs(), awayMs: nowAway(), idleMs: nowIdle(), progress: progressPct() }); }, CONFIG.heartbeatSeconds * 1000);
+}
+window.addEventListener('pagehide', () => { if (started && !completedEmitted) emit('lesson_exited', summary()); });
+
+/* ---------------- Navigation ---------------- */
+const nextBtn = $('#nextBtn'), backBtn = $('#backBtn'), hint = $('#navHint');
+function updateNav() {
+  backBtn.disabled = current === 0;
+  nextBtn.hidden = current === TOTAL - 1;
+  nextBtn.disabled = !reqMet[current];
+  hint.textContent = reqMet[current] ? '' : (slides[current].dataset.hint || 'Complete the activity to continue');
+  $('#slideCount').textContent = `${current + 1} / ${TOTAL}`;
+  $('#progressFill').style.width = progressPct() + '%';
+}
+function markReq(i) {
+  if (reqMet[i]) return;
+  reqMet[i] = true;
+  updateNav();
+  if (i === current) { nextBtn.classList.remove('nudge'); void nextBtn.offsetWidth; nextBtn.classList.add('nudge'); }
+  emit('activity_completed', { slideId: slides[i].id });
+  emitProgress();
+}
+let transitioning = false;
+function goTo(n) {
+  if (n < 0 || n >= TOTAL || n === current || transitioning) return;
+  if (n > current && !reqMet[current]) return;
+  emit('slide_exit', { slideId: slides[current].id, title: slides[current].dataset.title, completed: reqMet[current], ...slideTimes() });
+  transitioning = true;
+  playWipe(() => { slides[current].classList.remove('active'); current = n; enterSlide(); transitioning = false; });
+}
+function playWipe(cb) {
+  const w = $('#wipe');
+  if (reduceMotion) { cb(); return; }
+  w.classList.remove('go'); void w.offsetWidth; w.classList.add('go');
+  setTimeout(cb, 320);
+}
+const onEnter = {};
+function enterSlide() {
+  const s = slides[current];
+  s.classList.add('active');
+  $('#stage').scrollTop = 0;
+  T.slideStart = Date.now(); T.slideAway = 0; T.slideIdle = 0;
+  visited[current] = true;
+  if (onEnter[s.id]) onEnter[s.id]();
+  fitSlide();
+  updateNav();
+  emit('slide_viewed', { slideId: s.id, index: current, title: s.dataset.title });
+  emitProgress();
+  const h = s.querySelector('h1,h2'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+}
+/* ---------------- Fit-to-frame ----------------
+   Wide frames (>= 720 x 420): the slide is laid out at a virtual width and
+   scaled down so it always fits the visible stage, centred vertically.
+   Narrow frames (phones): normal scrolling layout. */
+const stage = $('#stage');
+const MIN_SCALE = 0.6;
+slides.forEach(s => {
+  const inner = s.querySelector('.slide-inner');
+  const fit = document.createElement('div'); fit.className = 'fit';
+  s.insertBefore(fit, inner); fit.appendChild(inner);
+});
+let fitRaf = 0;
+function fitSlide() {
+  const s = slides[current];
+  if (!s || !s.classList.contains('active')) return;
+  const fit = s.querySelector('.fit');
+  const W = stage.clientWidth, H = stage.clientHeight;
+  if (W < 720 || H < 420) {
+    fit.style.width = ''; fit.style.transform = ''; fit.style.marginTop = '';
+    s.style.height = ''; s.classList.remove('fitted');
+    return;
+  }
+  s.classList.add('fitted'); s.scrollTop = 0;
+  let sc = 1;
+  for (let i = 0; i < 6; i++) {
+    fit.style.width = (W / sc) + 'px'; fit.style.transform = `scale(${sc})`;
+    const next = Math.max(MIN_SCALE, Math.min(1, sc * H / (fit.offsetHeight * sc)));
+    if (Math.abs(next - sc) < 0.004) { sc = next; break; }
+    sc = next;
+  }
+  fit.style.width = (W / sc) + 'px'; fit.style.transform = `scale(${sc})`;
+  const vis = fit.offsetHeight * sc;
+  fit.style.marginTop = Math.max(0, (H - vis) / 2) + 'px';
+  s.style.height = Math.max(H, vis) + 'px';
+}
+const queueFit = () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitSlide); };
+window.addEventListener('resize', queueFit);
+if (window.ResizeObserver) { const ro = new ResizeObserver(queueFit); slides.forEach(s => ro.observe(s.querySelector('.slide-inner'))); }
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(queueFit);
+
+nextBtn.addEventListener('click', () => goTo(current + 1));
+backBtn.addEventListener('click', () => goTo(current - 1));
+document.addEventListener('keydown', e => {
+  if (e.target.closest && e.target.closest('input,textarea')) return;
+  if (e.key === 'ArrowRight' && reqMet[current]) goTo(current + 1);
+  if (e.key === 'ArrowLeft') goTo(current - 1);
+});
+
+/* ---------------- Shared art ---------------- */
+const STAR = 'M12 1.6l3.05 6.6 7.2.8-5.35 4.9 1.5 7.1L12 17.4 5.6 21l1.5-7.1L1.75 9l7.2-.8z';
+const BIN_COLORS = { wet: '#2DBE60', dry: '#3B82F6', haz: '#EF4444' };
+const BIN_NAMES = { wet: 'Wet', dry: 'Dry', haz: 'Hazardous' };
+function binSVG(type) {
+  const c = BIN_COLORS[type];
+  return `<svg viewBox="0 0 80 96" aria-hidden="true"><g class="lid"><rect x="30" y="1" width="20" height="8" rx="3" fill="${c}"/><rect x="4" y="8" width="72" height="11" rx="4" fill="${c}"/></g><path d="M10 22h60l-6 69a4 4 0 0 1-4 3.6H20A4 4 0 0 1 16 91z" fill="${c}"/><path d="M28 35v44M40 35v44M52 35v44" stroke="rgba(0,0,0,.28)" stroke-width="4" stroke-linecap="round"/></svg>`;
+}
+$$('[data-binsvg]').forEach(el => { el.outerHTML = binSVG(el.dataset.binsvg); });
+$$('.rays').forEach(svg => {
+  let s = '';
+  for (let i = 0; i < 36; i++) {
+    const a = i * 10 * Math.PI / 180, r1 = i % 2 ? 78 : 70, r2 = 98;
+    s += `<line x1="${100 + r1 * Math.cos(a)}" y1="${100 + r1 * Math.sin(a)}" x2="${100 + r2 * Math.cos(a)}" y2="${100 + r2 * Math.sin(a)}"/>`;
+  }
+  svg.innerHTML = s;
+});
+const LANDFILL = `<svg viewBox="0 0 120 84" class="landfill" aria-hidden="true"><g class="smoke" fill="none" stroke="#8d877f" stroke-width="4" stroke-linecap="round"><path class="s1" d="M44 34c-8-7 8-11 0-20"/><path class="s2" d="M64 28c-8-7 8-11 0-20"/><path class="s3" d="M84 34c-8-7 8-11 0-20"/></g><path d="M4 80 Q26 40 50 44 Q62 30 78 42 Q100 40 116 80Z" fill="#4a433c"/><circle cx="34" cy="64" r="5" fill="#6d645a"/><rect x="58" y="56" width="10" height="7" rx="1.5" fill="#3B82F6" opacity=".7" transform="rotate(-18 63 59)"/><circle cx="86" cy="66" r="4" fill="#EF4444" opacity=".7"/><path d="M70 70l8-4 2 6z" fill="#2DBE60" opacity=".7"/></svg>`;
+function miniBin(t) { return binSVG(t).replace('<svg ', '<svg width="30" height="36" '); }
+
+/* ---------------- 1 · Two futures ---------------- */
+const FUTURES = {
+  mixed: `<div class="flow">
+    <div class="node" style="--d:0s"><div class="node-art">🛍️</div><b>One mixed bag</b><small>Peels, plastic, paper and a leaking battery, all together.</small></div>
+    <div class="arrow" style="--d:.35s"></div>
+    <div class="node" style="--d:.5s"><div class="node-art truck"><span>🚛</span></div><b>Crushed in one truck</b><small>Food juice soaks the paper. Plastic gets greasy and dirty.</small></div>
+    <div class="arrow" style="--d:.9s"></div>
+    <div class="node bad" style="--d:1.05s"><div class="node-art">${LANDFILL}</div><b>Dumped or burnt</b><small>Almost nothing can be recovered. Toxins seep into soil, water and air.</small></div>
+  </div>`,
+  sorted: `<div class="lanes">
+    <div class="lane" style="--d:0s"><div class="lane-src">${miniBin('wet')}Wet</div><div class="arrow" style="--d:.3s"></div><div class="lane-out"><span class="em sprout" style="--d2:.5s">🌱</span><div><b>Compost</b><small>Feeds gardens and farms instead of rotting in a dump.</small></div></div></div>
+    <div class="lane" style="--d:.25s"><div class="lane-src">${miniBin('dry')}Dry</div><div class="arrow" style="--d:.55s"></div><div class="lane-out"><span class="em spin-slow">♻️</span><div><b>Recycled</b><small>Clean paper, plastic, metal and glass get a second life.</small></div></div></div>
+    <div class="lane" style="--d:.5s"><div class="lane-src">${miniBin('haz')}Hazardous</div><div class="arrow" style="--d:.8s"></div><div class="lane-out"><span class="em">🛡️</span><div><b>Safe disposal</b><small>Handled separately so poisons stay out of soil and water.</small></div></div></div>
+  </div>`
+};
+const seenFutures = new Set();
+$$('#why .toggle button').forEach(b => b.addEventListener('click', () => {
+  const k = b.dataset.future;
+  $$('#why .toggle button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  const p = $('#futurePanel'); p.className = 'future-panel ' + k; p.innerHTML = FUTURES[k];
+  if (!seenFutures.has(k)) {
+    seenFutures.add(k);
+    b.insertAdjacentHTML('beforeend', '<span class="seen">✓</span>');
+    emit('interaction', { activity: 'two-futures', viewed: k });
+  }
+  if (seenFutures.size === 2) { $('#whyTakeaway').hidden = false; markReq(idx('why')); }
+}));
+
+/* ---------------- 2 · Bin cards ---------------- */
+const flipped = new Set();
+$$('#bins .flip').forEach(c => {
+  const flip = () => {
+    c.classList.toggle('flipped');
+    c.setAttribute('aria-pressed', String(c.classList.contains('flipped')));
+    if (!flipped.has(c.dataset.bin)) {
+      flipped.add(c.dataset.bin);
+      $('#flipCount').textContent = flipped.size;
+      emit('interaction', { activity: 'bin-cards', flipped: c.dataset.bin });
+      if (flipped.size === 3) markReq(idx('bins'));
+    }
+  };
+  c.addEventListener('click', flip);
+  c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } });
+});
+
+/* ---------------- 3 · Sort game ---------------- */
+const ITEMS = [
+  { id: 'banana', e: '🍌', n: 'Banana peel', bin: 'wet', why: 'Peels are food waste. They rot, so they go in wet.' },
+  { id: 'bottle', e: '🧴', n: 'Empty shampoo bottle', bin: 'dry', why: "Plastic doesn't rot. Empty and dry, it goes in dry for recycling." },
+  { id: 'paper', e: '📰', n: 'Old newspaper', bin: 'dry', why: 'Paper is dry waste. Keep it clean and dry so it can be recycled.' },
+  { id: 'battery', e: '🔋', n: 'Used AA battery', bin: 'haz', why: 'Batteries can leak toxic chemicals. Always hazardous.' },
+  { id: 'tea', e: '🍵', n: 'Used tea leaves', bin: 'wet', why: 'Tea leaves are food waste, perfect for compost.' },
+  { id: 'cfl', e: '💡', n: 'Fused CFL bulb', bin: 'haz', why: 'CFL bulbs contain mercury. Hazardous: keep it whole.' },
+  { id: 'can', e: '🥫', n: 'Rinsed food tin', bin: 'dry', why: 'Metal is dry waste. Rinsed tins are easy to recycle.' },
+  { id: 'meds', e: '💊', n: 'Expired tablets', bin: 'haz', why: 'Medicines must not reach soil or water. Hazardous.' },
+  { id: 'egg', e: '🥚', n: 'Eggshells', bin: 'wet', why: 'Eggshells break down naturally, so they go in wet.' }
+];
+const sort = { done: 0, miss: 0, perBin: { wet: 0, dry: 0, haz: 0 }, inited: false };
+let selected = null, drag = null;
+const tray = $('#tray'), fb = $('#sortFeedback'), bins = $$('#sort .bin');
+function initSort() {
+  if (sort.inited) return; sort.inited = true;
+  const order = [...ITEMS].sort(() => Math.random() - .5);
+  tray.innerHTML = order.map(it => `<button class="item" data-id="${it.id}" aria-label="${it.n}"><span class="em">${it.e}</span><span class="nm">${it.n}</span></button>`).join('');
+  if (reqMet[idx('sort')]) { tray.innerHTML = '<div class="all-done">✓ Already completed. Nice work.</div>'; }
+}
+onEnter.sort = initSort;
+function setFeedback(cls, html) { fb.className = 'sort-feedback ' + cls; fb.innerHTML = html; }
+function select(el) {
+  if (selected) selected.classList.remove('selected');
+  if (selected === el) { selected = null; bins.forEach(b => b.classList.remove('armed')); return; }
+  selected = el; el.classList.add('selected');
+  bins.forEach(b => b.classList.add('armed'));
+  const it = ITEMS.find(i => i.id === el.dataset.id);
+  setFeedback('', `${it.e} <span><b>${it.n}</b> picked up. Now tap a bin.</span>`);
+}
+function tryDrop(el, binType) {
+  const it = ITEMS.find(i => i.id === el.dataset.id);
+  const bin = bins.find(b => b.dataset.bin === binType);
+  const ok = it.bin === binType;
+  emit('interaction', { activity: 'sort', item: it.id, chosen: binType, correct: ok });
+  if (selected) { selected.classList.remove('selected'); selected = null; }
+  bins.forEach(b => b.classList.remove('armed'));
+  if (ok) {
+    sort.done++; sort.perBin[binType]++;
+    bin.querySelector('.b-count span').textContent = sort.perBin[binType];
+    bin.classList.remove('gulp'); void bin.offsetWidth; bin.classList.add('gulp');
+    el.classList.add('done');
+    setTimeout(() => { el.remove(); if (!tray.querySelector('.item')) tray.innerHTML = '<div class="all-done">✓ All sorted. The truck can leave clean!</div>'; }, 450);
+    setFeedback('good', `✅ <span><b>${it.n} → ${BIN_NAMES[binType]}.</b> ${it.why}</span>`);
+    $('#sortDone').textContent = sort.done;
+    if (sort.done === ITEMS.length) {
+      const accuracy = Math.round(ITEMS.length / (ITEMS.length + sort.miss) * 100);
+      stats.sort = { mistakes: sort.miss, accuracy };
+      emit('activity_result', { activity: 'sort', mistakes: sort.miss, accuracy });
+      setFeedback('good', `🎉 <span><b>Perfect collection!</b> ${sort.miss ? `${sort.miss} mistake${sort.miss > 1 ? 's' : ''} along the way, and that's how you learn.` : 'Zero mistakes. You are a natural.'}</span>`);
+      markReq(idx('sort'));
+    }
+  } else {
+    sort.miss++; $('#sortMiss').textContent = sort.miss;
+    bin.classList.remove('reject'); void bin.offsetWidth; bin.classList.add('reject');
+    el.classList.remove('wrong'); void el.offsetWidth; el.classList.add('wrong');
+    setFeedback('bad', `❌ <span><b>${it.n} isn't ${BIN_NAMES[binType].toLowerCase()} waste.</b> Ask yourself: does it rot (wet), can it be recycled (dry), or could it harm someone (hazardous)?</span>`);
+  }
+}
+tray.addEventListener('pointerdown', e => {
+  const el = e.target.closest('.item'); if (!el || el.classList.contains('done')) return;
+  e.preventDefault();
+  drag = { el, x: e.clientX, y: e.clientY, moved: false, ghost: null };
+  try { el.setPointerCapture(e.pointerId); } catch (_) {}
+});
+document.addEventListener('pointermove', e => {
+  if (!drag) return;
+  if (!drag.moved && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 6) {
+    drag.moved = true;
+    drag.ghost = drag.el.cloneNode(true); drag.ghost.classList.add('ghost'); drag.ghost.classList.remove('selected');
+    document.body.appendChild(drag.ghost); drag.el.classList.add('lifting');
+    if (selected) { selected.classList.remove('selected'); selected = null; }
+    bins.forEach(b => b.classList.add('armed'));
+  }
+  if (drag.moved) {
+    drag.ghost.style.left = e.clientX + 'px'; drag.ghost.style.top = e.clientY + 'px';
+    const over = document.elementFromPoint(e.clientX, e.clientY);
+    const b = over && over.closest('.bin');
+    bins.forEach(x => x.classList.toggle('over', x === b));
+  }
+});
+function endDrag(e, cancelled) {
+  if (!drag) return;
+  const d = drag; drag = null;
+  if (d.moved) {
+    d.ghost.remove(); d.el.classList.remove('lifting');
+    bins.forEach(x => x.classList.remove('over', 'armed'));
+    if (!cancelled) { const over = document.elementFromPoint(e.clientX, e.clientY); const b = over && over.closest('.bin'); if (b) tryDrop(d.el, b.dataset.bin); }
+  } else if (!cancelled) { select(d.el); }
+}
+document.addEventListener('pointerup', e => endDrag(e, false));
+document.addEventListener('pointercancel', e => endDrag(e, true));
+tray.addEventListener('keydown', e => { const el = e.target.closest('.item'); if (el && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); select(el); } });
+bins.forEach(b => b.addEventListener('click', () => { if (selected) tryDrop(selected, b.dataset.bin); else setFeedback('', '👆 Pick up an item first, then choose a bin.'); }));
+
+/* ---------------- 4 · Playbook ---------------- */
+const opened = new Set();
+$$('#playbook .move').forEach(m => {
+  const head = m.querySelector('.move-head');
+  head.addEventListener('click', () => {
+    const open = m.classList.toggle('open');
+    head.setAttribute('aria-expanded', String(open));
+    if (open && !opened.has(m.dataset.move)) {
+      opened.add(m.dataset.move); $('#moveCount').textContent = opened.size;
+      emit('interaction', { activity: 'playbook', opened: m.dataset.move });
+      if (opened.size === 4) markReq(idx('playbook'));
+    }
+  });
+});
+
+/* ---------------- 5 · Scenario ---------------- */
+const SCEN = {
+  start: { trust: 50, seg: 30 },
+  steps: [
+    {
+      id: 'd1', time: 'Gate 2 · 7:40 AM', who: 'Aunty Meena · Flat B-204', avatar: '👩🏽',
+      setup: "It's your first week. Residents are dropping waste at the gate before work. Aunty Meena rushes up and holds out one big bag, with food, plastic and paper all mixed together.",
+      line: '"Beta, I\'m getting late for office. Just take it. All this sorting is too much work for me."',
+      choices: [
+        { id: 'refuse', label: '"Sorry aunty, I can\'t take mixed waste. Rules are rules."', trust: -30, seg: 0, q: 'risky',
+          fb: "Aunty Meena walks off annoyed. That evening her bag turns up dumped beside the gate. The rule was right, but refusing without helping turned a resident against the programme." },
+        { id: 'silent', label: 'Take the bag without saying anything. She\'s in a hurry.', trust: 5, seg: -10, q: 'missed',
+          fb: "Easy for everyone today. But the message she heard was <b>mixing is fine</b>. Tomorrow's bag will be mixed too, and so will her neighbours'." },
+        { id: 'help', label: '"No problem today, aunty. Can I drop by this evening? I\'ll show you a 2-minute trick that makes sorting easy."', trust: 20, seg: 15, q: 'best',
+          fb: 'She laughs: "Okay, come at 7." You took the pressure off today <b>and</b> made a plan to fix the habit. That\'s how stewards build trust.' }
+      ]
+    },
+    {
+      id: 'd2', time: 'One week later · 7:35 AM', who: 'Aunty Meena · Flat B-204', avatar: '👩🏽',
+      setup: 'Aunty Meena is back, this time with two bags, wet and dry, properly separated. But through the dry bag you can see two old batteries and a cracked tube light.',
+      line: '"See beta, I\'m doing it now! My neighbour was even asking me how."',
+      choices: [
+        { id: 'public', label: 'Point out the mistake right there at the gate, so others in the queue learn too.', trust: -20, seg: 5, q: 'risky',
+          fb: 'Her smile disappears and the neighbours stare. She got 90% right and was called out in public for the other 10%. Next week she might not bother at all.' },
+        { id: 'thank', label: 'Thank her warmly, then quietly hand her a red bag: "Batteries and tube lights go in this one. They can leak or cut someone."', trust: 20, seg: 25, q: 'best',
+          fb: 'She beams, takes the red bag, and tells her neighbour about it the same day. <b>Praise first, fix privately.</b> One resident becomes two.' },
+        { id: 'fix', label: 'Pull the batteries and broken tube out yourself and say nothing.', trust: 5, seg: 0, q: 'risky',
+          fb: 'A cracked tube light can cut you and release harmful mercury vapour, so <b>never handle broken hazardous items bare-handed</b>. And she never learns, so it will happen again.' }
+      ]
+    }
+  ]
+};
+const QLABEL = { best: 'Best move', missed: 'Missed chance', risky: 'Risky move' };
+let scen = null;
+const clamp = v => Math.max(0, Math.min(100, v));
+function meterColor(v) { return v >= 70 ? 'var(--green)' : v >= 40 ? 'var(--yellow)' : 'var(--red)'; }
+function setMeter(id, v, delta) {
+  const m = $('#' + id);
+  m.querySelector('b').textContent = v;
+  const f = m.querySelector('.meter-fill'); f.style.width = v + '%'; f.style.background = meterColor(v);
+  const old = m.querySelector('.delta'); if (old) old.remove();
+  if (delta !== undefined) {
+    const d = document.createElement('span');
+    d.className = 'delta ' + (delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat');
+    d.textContent = (delta > 0 ? '+' : '') + delta;
+    m.appendChild(d);
+  }
+}
+function resetScenario() {
+  scen = { step: 0, trust: SCEN.start.trust, seg: SCEN.start.seg, path: [] };
+  setMeter('mTrust', scen.trust); setMeter('mSeg', scen.seg);
+  renderScenario();
+}
+onEnter.scenario = () => { if (!scen) resetScenario(); };
+function renderScenario() {
+  const box = $('#scenBox');
+  if (scen.step >= SCEN.steps.length) return renderScenEnd();
+  const st = SCEN.steps[scen.step];
+  box.innerHTML = `<div class="scene">
+    <div class="scene-grid">
+      <div>
+        <span class="scene-time">${st.time} · Decision ${scen.step + 1} of ${SCEN.steps.length}</span>
+        <p class="scene-setup">${st.setup}</p>
+        <div class="speech"><div class="avatar" aria-hidden="true">${st.avatar}</div><div><div class="who">${st.who}</div><div class="bubble">${st.line}</div></div></div>
+      </div>
+      <div>
+        <div class="choices-label">What do you do?</div>
+        <div class="choices">${st.choices.map((c, i) => `<button class="choice" data-i="${i}"><span class="key">${'ABC'[i]}</span><span>${c.label}</span></button>`).join('')}</div>
+        <div class="fb-slot"></div>
+      </div>
+    </div>
+  </div>`;
+  $$('.choice', box).forEach(b => b.addEventListener('click', () => choose(+b.dataset.i)));
+}
+function choose(i) {
+  const st = SCEN.steps[scen.step], c = st.choices[i], box = $('#scenBox');
+  $$('.choice', box).forEach((b, j) => { b.disabled = true; if (j === i) b.classList.add('chosen'); });
+  $('.choices', box).classList.add('decided'); $('.choices-label', box).textContent = 'Your choice';
+  const t0 = scen.trust, s0 = scen.seg;
+  scen.trust = clamp(scen.trust + c.trust); scen.seg = clamp(scen.seg + c.seg);
+  scen.path.push({ step: st.id, choice: c.id, quality: c.q });
+  setMeter('mTrust', scen.trust, scen.trust - t0); setMeter('mSeg', scen.seg, scen.seg - s0);
+  emit('scenario_choice', { step: st.id, choiceId: c.id, quality: c.q, trust: scen.trust, segregation: scen.seg });
+  const last = scen.step === SCEN.steps.length - 1;
+  $('.fb-slot', box).innerHTML = `<div class="scene-feedback"><span class="q-chip ${c.q}">${QLABEL[c.q]}</span><p>${c.fb}</p><button class="btn btn-primary">${last ? 'See the outcome →' : 'Continue the story →'}</button></div>`;
+  $('.fb-slot .btn', box).addEventListener('click', () => { scen.step++; renderScenario(); });
+  if (!slides[current].classList.contains('fitted')) $('.fb-slot', box).scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+}
+function renderScenEnd() {
+  const best = scen.path.filter(p => p.quality === 'best').length;
+  let rating, medal, msg;
+  if (scen.trust >= 75 && scen.seg >= 60) { rating = 'Community Champion'; medal = '🏆'; msg = 'You protected the relationship and fixed the habit. Aunty Meena is now helping you spread the word. That is exactly what a steward does.'; }
+  else if (scen.trust >= 50) { rating = 'On the right track'; medal = '👍'; msg = 'You kept things friendly, but the habit didn\'t fully change. Remember: make it easy, praise first, correct privately.'; }
+  else { rating = 'Trust lost'; medal = '🔁'; msg = 'Being right isn\'t enough if the resident stops listening. Try the scenario again and lead with help, not rules.'; }
+  stats.scenario = { rating, trust: scen.trust, segregation: scen.seg, bestChoices: best, of: SCEN.steps.length, path: scen.path };
+  emit('scenario_completed', stats.scenario);
+  $('#scenBox').innerHTML = `<div class="scene scen-end">
+    <div class="medal">${medal}</div>
+    <div class="eyebrow" style="justify-content:center">Scenario outcome</div>
+    <div class="rating">${rating}</div>
+    <div class="path">${scen.path.map((p, i) => `<span>Decision ${i + 1}: <b style="color:${p.quality === 'best' ? 'var(--green)' : p.quality === 'missed' ? 'var(--yellow)' : 'var(--red)'}">${QLABEL[p.quality]}</b></span>`).join('')}</div>
+    <p>${msg}</p>
+    <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn btn-ghost" id="replayScen">↺ Replay scenario</button></div>
+  </div>`;
+  $('#replayScen').addEventListener('click', () => { emit('scenario_replay', {}); resetScenario(); });
+  markReq(idx('scenario'));
+}
+
+/* ---------------- 6 · Quiz ---------------- */
+const QUIZ = [
+  { q: "A resident's kitchen bag has tea leaves, vegetable peels and eggshells. Which bin?", o: ['Green: wet waste', 'Blue: dry waste', 'Red: hazardous'], a: 0,
+    why: 'All three are food waste that rots, so they go in wet and become compost.' },
+  { q: 'Which of these is domestic hazardous waste?', o: ['Rinsed milk packet', 'Fused tube light', 'Cardboard box', 'Coconut shell'], a: 1,
+    why: 'Tube lights contain mercury and break into sharp glass. Keep them whole and separate.' },
+  { q: 'Why does segregation need to happen at source, inside the home?', o: ["It's a rule, nothing more", 'Once waste is mixed, wet waste spoils the dry waste and most of it can\'t be recovered', 'So trucks can carry more', 'It only matters for plastic'], a: 1,
+    why: 'Mixing contaminates everything. Sorting at source is what keeps compost clean and recyclables usable.' },
+  { q: 'A resident hands you a mixed bag and says they have no time. Your best first move?', o: ['Refuse the bag. Rules are rules.', 'Take it quietly to avoid conflict', 'Take it today and offer a quick demo to make sorting easy', 'Report them to the society committee right away'], a: 2,
+    why: 'Help first, then fix the habit. Refusing breaks trust, and silence teaches that mixing is fine.' },
+  { q: 'A resident segregated well but left a battery in the dry bag. How do you correct it?', o: ['Point it out in public so others learn', 'Thank them, then privately explain where batteries go', 'Remove it yourself and say nothing'], a: 1,
+    why: 'Praise progress, fix privately. And never handle hazardous items yourself without protection.' }
+];
+let quiz = null;
+function resetQuiz() { quiz = { i: 0, correct: 0, results: [] }; renderQuiz(); }
+onEnter.quiz = () => { if (!quiz) resetQuiz(); };
+function dots() { return `<div class="q-dots">${QUIZ.map((_, i) => `<i class="${i < quiz.results.length ? (quiz.results[i] ? 'ok' : 'no') : i === quiz.i ? 'now' : ''}"></i>`).join('')}</div>`; }
+function renderQuiz() {
+  const box = $('#quizBox');
+  if (quiz.i >= QUIZ.length) return quizResult();
+  const Q = QUIZ[quiz.i];
+  box.innerHTML = `${dots()}<div class="q-num">Question ${quiz.i + 1} of ${QUIZ.length}</div><div class="q-text">${Q.q}</div>
+    <div class="opts">${Q.o.map((o, j) => `<button class="opt" data-j="${j}"><span class="key">${'ABCD'[j]}</span><span>${o}</span></button>`).join('')}</div><div class="q-after"></div>`;
+  $$('.opt', box).forEach(b => b.addEventListener('click', () => answer(+b.dataset.j)));
+}
+function answer(j) {
+  const Q = QUIZ[quiz.i], box = $('#quizBox'), ok = j === Q.a;
+  $$('.opt', box).forEach((b, k) => { b.disabled = true; if (k === Q.a) b.classList.add('correct'); else if (k === j) b.classList.add('wrong'); });
+  quiz.results.push(ok); if (ok) quiz.correct++;
+  emit('quiz_answer', { q: quiz.i + 1, chosen: j, correct: ok, attempt: stats.quiz.attempts + 1 });
+  const last = quiz.i === QUIZ.length - 1;
+  $('.q-after', box).innerHTML = `<div class="explain"><b>${ok ? '✅ Correct.' : '❌ Not quite.'}</b> ${Q.why}</div><div class="q-actions"><button class="btn btn-primary">${last ? 'See my score →' : 'Next question →'}</button></div>`;
+  $('.q-actions .btn', box).addEventListener('click', () => { quiz.i++; renderQuiz(); });
+  $('.q-dots', box).outerHTML = dots();
+}
+function quizResult() {
+  const pct = Math.round(quiz.correct / QUIZ.length * 100), passed = quiz.correct / QUIZ.length >= LESSON.passMark;
+  stats.quiz.attempts++;
+  stats.quiz.score = quiz.correct; stats.quiz.passed = stats.quiz.passed || passed;
+  emit('quiz_completed', { score: quiz.correct, total: QUIZ.length, percent: pct, passed, attempt: stats.quiz.attempts });
+  $('#quizBox').innerHTML = `${dots()}<div class="q-result">
+    <div class="big ${passed ? 'pass' : 'fail'}">${pct}%</div>
+    <p>${passed ? `<b>${quiz.correct} of ${QUIZ.length} correct.</b> You've passed. Head to the last screen to finish the module.` : `<b>${quiz.correct} of ${QUIZ.length} correct.</b> You need ${Math.ceil(LESSON.passMark * QUIZ.length)} to pass. Have another go; the explanations will help.`}</p>
+    ${passed ? '' : '<button class="btn btn-primary" id="retryQuiz">↺ Retry quiz</button>'}
+  </div>`;
+  if (passed) markReq(idx('quiz'));
+  else $('#retryQuiz').addEventListener('click', () => { emit('quiz_retry', { attempt: stats.quiz.attempts + 1 }); resetQuiz(); });
+}
+
+/* ---------------- 7 · Complete ---------------- */
+onEnter.complete = () => {
+  $('#sQuiz').textContent = stats.quiz.score !== null ? `${stats.quiz.score}/${stats.quiz.total}` : '–';
+  $('#sScen').textContent = stats.scenario ? ({ 'Community Champion': 'Champion', 'On the right track': 'On track', 'Trust lost': 'Retry' }[stats.scenario.rating] || stats.scenario.rating) : '–';
+  $('#sSort').textContent = stats.sort ? stats.sort.accuracy + '%' : '–';
+  $('#sTime').textContent = fmtTime(activeMs());
+  if (!completedEmitted) {
+    completedEmitted = true;
+    emit('lesson_completed', { ...summary(), progress: 100, completion: 'completed', success: stats.quiz.passed ? 'passed' : 'failed' });
+    confetti();
+  }
+};
+$('#pledgeBtn').addEventListener('click', e => {
+  if (stats.pledge) return;
+  stats.pledge = true; e.currentTarget.textContent = '★ Pledge taken'; e.currentTarget.disabled = true;
+  emit('pledge_taken', {}); confetti();
+});
+function confetti() {
+  if (reduceMotion) return;
+  const colors = ['#FFC629', '#F6F4EE', '#2DBE60', '#3B82F6', '#EF4444'];
+  for (let i = 0; i < 70; i++) {
+    const c = document.createElement('i'); c.className = 'confetti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colors[i % colors.length];
+    c.style.setProperty('--x', (Math.random() * 200 - 100) + 'px');
+    c.style.setProperty('--r', (Math.random() * 720 - 360) + 'deg');
+    c.style.animationDuration = (1.8 + Math.random() * 1.6) + 's';
+    c.style.animationDelay = (Math.random() * .4) + 's';
+    if (i % 3 === 0) c.style.borderRadius = '50%';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
+  }
+}
+
+/* ---------------- Start / init from host ---------------- */
+function start(init) {
+  if (started) return;
+  started = true;
+  if (init) {
+    if (init.learner) learner = { ...learner, ...init.learner };
+    if (init.attemptId) attemptId = init.attemptId;
+    if (init.config) Object.assign(CONFIG, init.config);
+  }
+  clearInterval(readyTimer); clearTimeout(fallbackTimer);
+  const now = Date.now(); T.start = now; T.lastActivity = now;
+  $('#learnerName').textContent = learner.name ? learner.name.split(' ')[0] : 'Steward';
+  let resumed = false;
+  const r = init && init.resume;
+  if (init && init.review) {
+    /* Review mode: lesson already completed. All screens unlocked, no new completion event. */
+    reqMet.fill(true); visited.fill(true); completedEmitted = true;
+    $('#loading').remove();
+    emit('review_started', { title: LESSON.title });
+    enterSlide();
+    return;
+  }
+  if (r && typeof r.slide === 'number' && r.slide > 0 && r.slide < TOTAL - 1) {
+    (r.reqMet || []).forEach((v, i) => { if (v && i < TOTAL) reqMet[i] = true; });
+    (r.visited || []).forEach((v, i) => { if (v && i < TOTAL) visited[i] = true; });
+    for (let i = 0; i < r.slide; i++) { reqMet[i] = true; visited[i] = true; }
+    if (r.sort) stats.sort = r.sort;
+    if (r.scenario) stats.scenario = r.scenario;
+    current = r.slide; resumed = true;
+  }
+  $('#loading').remove();
+  emit(resumed ? 'lesson_resumed' : 'lesson_started', { title: LESSON.title, totalSlides: TOTAL, learnerName: learner.name || null, fromSlide: current, config: { idleSeconds: CONFIG.idleSeconds } });
+  enterSlide();
+  startHeartbeat();
+}
+window.addEventListener('message', e => {
+  const m = e.data;
+  if (!m || m.source !== 'wtcm-host') return;
+  if (CONFIG.hostOrigin && e.origin !== CONFIG.hostOrigin) return;
+  if (m.type === 'init') start(m);
+});
+/* In an iframe: keep announcing "ready" until the host replies with init
+   (so a slow host that is still loading saved progress never misses it).
+   If no host answers within 8s, start fresh on our own. */
+let readyTimer = null, fallbackTimer = null;
+if (inIframe) {
+  const sayReady = () => emit('ready', { lessonId: LESSON.id, title: LESSON.title, version: LESSON.version, totalSlides: TOTAL });
+  sayReady();
+  readyTimer = setInterval(sayReady, 400);
+  fallbackTimer = setTimeout(() => start(null), 8000);
+} else start(null);
+
+/* Expose a tiny API for debugging in the console */
+window.WTCMLesson = { summary, goTo: n => { reqMet.fill(true); goTo(n); }, emit };
+})();
+</script>
+</body>
+</html>

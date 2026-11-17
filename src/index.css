@@ -1,0 +1,37 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #0b0b0b;
+  --color-panel: #141414;
+  --color-panel-2: #1d1d1d;
+  --color-line: #2c2c2c;
+  --color-brand: #ffc629;
+  --color-paper: #f6f4ee;
+  --color-muted: #a19e97;
+  --color-ok: #2dbe60;
+  --color-bad: #ef4444;
+
+  --font-display: 'Archivo Black', system-ui, sans-serif;
+  --font-label: 'Oswald', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-ink text-paper font-sans antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display uppercase tracking-wide;
+  }
+}
+
+@utility label {
+  @apply font-label uppercase tracking-wider;
+}
