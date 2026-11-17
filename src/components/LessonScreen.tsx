@@ -80,6 +80,8 @@ export const LessonScreen = forwardRef<HTMLDivElement, Props>(function LessonScr
 
   // Full screen on a phone held upright: letterbox like a video and ask to rotate.
   const portraitFullscreen = isFullscreen && stage.height > stage.width;
+  // Phones in full screen: lesson only, plus a floating exit button (no control bar).
+  const immersive = isFullscreen && compact;
   const measured = stage.width > 0 && stage.height > 0;
   const fit = measured ? layout(stage.width, stage.height, portraitFullscreen) : null;
 
@@ -125,9 +127,35 @@ export const LessonScreen = forwardRef<HTMLDivElement, Props>(function LessonScr
             Turn your phone sideways for the full view
           </div>
         )}
+
+        {immersive && (
+          <>
+            {/* Top-left sits over the lesson's decorative logo, away from its Back/Next buttons. */}
+            <button
+              type="button"
+              onClick={onToggleFullscreen}
+              aria-label="Exit full screen"
+              data-testid="fullscreen-exit"
+              className="absolute z-10 grid h-10 w-10 place-items-center rounded-full bg-black/70 text-paper ring-1 ring-white/20 backdrop-blur hover:text-brand"
+              style={{ top: 'max(8px, env(safe-area-inset-top))', left: 'max(8px, env(safe-area-inset-left))' }}
+            >
+              <ExpandIcon collapse />
+            </button>
+            {canFinish && (
+              <button
+                type="button"
+                onClick={onFinish}
+                className="label absolute z-10 rounded-full bg-brand px-4 py-2 text-xs text-ink shadow-lg hover:brightness-110"
+                style={{ top: 'max(8px, env(safe-area-inset-top))', right: 'max(8px, env(safe-area-inset-right))' }}
+              >
+                Finish course
+              </button>
+            )}
+          </>
+        )}
       </div>
 
-      <div className="shrink-0 border-t border-line bg-panel">
+      <div className={`shrink-0 border-t border-line bg-panel ${immersive ? 'hidden' : ''}`} data-testid="control-bar">
         <div className="h-1 w-full bg-panel-2" aria-hidden="true">
           <div className="h-full bg-brand transition-all duration-500" style={{ width: `${pct}%` }} />
         </div>

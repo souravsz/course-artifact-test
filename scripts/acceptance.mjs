@@ -193,6 +193,8 @@ for (const variant of ['native', 'fallback']) {
   const portrait = await canvasBox();
   check(`9 ${variant} portrait: 16:9 letterbox`, near(portrait.width / portrait.height, 16 / 9, 0.02), size(portrait));
   check(`9 ${variant} portrait: rotate hint shown`, await page.getByTestId('rotate-hint').isVisible());
+  check(`9 ${variant} control bar hidden in mobile full screen`, !(await page.getByTestId('control-bar').isVisible()));
+  check(`9 ${variant} floating exit button shown`, await page.getByTestId('fullscreen-exit').isVisible());
 
   // Turn the phone sideways.
   await page.setViewportSize({ width: 844, height: 390 });
@@ -203,7 +205,12 @@ for (const variant of ['native', 'fallback']) {
   check(`9 ${variant} landscape: rotate hint hidden`, (await page.getByTestId('rotate-hint').count()) === 0);
   const idx = await frame.evaluate(() => [...document.querySelectorAll('.slide')].findIndex((s) => s.classList.contains('active')));
   check(`9 ${variant} lesson stays on same screen`, idx === 2, `screen ${idx + 1}`);
-  await page.getByTestId('screen-fullscreen-toggle').click();
+  const exitBox = await page.getByTestId('fullscreen-exit').boundingBox();
+  const nextBox = await frame.locator('#nextBtn').boundingBox();
+  const backBox = await frame.locator('#backBtn').boundingBox();
+  const overlaps = (a, b) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+  check(`9 ${variant} exit button doesn't cover Back/Next`, !overlaps(exitBox, nextBox) && !overlaps(exitBox, backBox));
+  await page.getByTestId('fullscreen-exit').click();
   await page.waitForFunction(() => !document.querySelector('[data-testid=lesson-screen]')?.dataset.fullscreen);
 }
 check('9 lesson not reloaded by full screen or rotation', (await initCount()) === initsBefore);
